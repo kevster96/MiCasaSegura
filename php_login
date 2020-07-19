@@ -1,0 +1,55 @@
+<?php
+
+define("HOST","127.0.0.1:3307");
+ define("DB","bd_buffon");
+ define("USER","root");
+ define("PASS","");
+
+ $json = array();
+ 
+ $conexion = mysqli_connect(HOST,USER,PASS,DB);
+
+ if(!$conexion){
+    die("Connection failed: " . mysqli_connect_error());
+ }
+
+
+ $usuario =$_GET["usuario"];
+ $contrasena=$_GET["contrasena"];
+
+
+
+ $consulta_mostrar ="SELECT * FROM tblusuario WHERE usuario='{$usuario}' AND contrasena='{$contrasena}';";
+
+$resultado_consulta = mysqli_query($conexion, $consulta_mostrar);
+
+if(mysqli_num_rows($resultado_consulta)>0){
+
+    while($registro = mysqli_fetch_array($resultado_consulta)){
+
+        $json["usuario"][]= $registro;
+    
+
+    }
+    echo json_encode($json);
+    mysqli_close($conexion);
+
+}
+
+else{
+
+    $resultante["id_tblusuario"]="ERROR";
+    $resultante["nombre"]="ERROR";
+    $resultante["apellido"]="ERROR";
+    $resultante["usuario"]="ERROR";
+    $resultante["contrasena"]="ERROR";
+    $resultante["usuario_activo"]="ERROR";
+    $resultante["fk_empleado"]="ERROR";
+       
+    $jsonArray["usuario"][]=$resultante;
+    
+     echo json_encode($jsonArray);
+    
+    }
+
+?>
