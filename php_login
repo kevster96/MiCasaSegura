@@ -1,6 +1,6 @@
 <?php
 
-define("HOST","127.0.0.1:3307");
+define("HOST","put your IP here");
  define("DB","bd_buffon");
  define("USER","root");
  define("PASS","");
