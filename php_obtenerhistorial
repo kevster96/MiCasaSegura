@@ -1,0 +1,57 @@
+<?php
+
+define("HOST","-change this to your local host - ");
+ define("DB","bd_buffon");
+ define("USER","root");
+ define("PASS","");
+
+ $json = array();
+ 
+ $conexion = mysqli_connect(HOST,USER,PASS,DB);
+
+ if(!$conexion){
+    die("Connection failed: " . mysqli_connect_error());
+ }
+
+
+ $fk_idusuario =$_GET["fk_idusuario"];
+ $fk_idtblcheck=$_GET["fk_idtblcheck"];
+
+
+
+ $consulta_mostrar ="SELECT * FROM tblregistro WHERE fk_idusuario='{$fk_idusuario}' AND fk_idtblcheck='{$fk_idtblcheck}';";
+
+$resultado_consulta = mysqli_query($conexion, $consulta_mostrar);
+
+if(mysqli_num_rows($resultado_consulta)>0){
+
+    while($registro = mysqli_fetch_array($resultado_consulta)){
+
+        $json["registro"][]= $registro;
+     //   $json["medicamentos"]= $registro;
+
+    }
+    echo json_encode($json);
+    mysqli_close($conexion);
+
+}
+
+else{
+
+    $resultante["id_tblregistro"]="ERROR";
+    $resultante["fk_idtoken"]="ERROR";
+    $resultante["fk_idusuario"]="ERROR";
+    $resultante["fk_idempleado"]="ERROR";
+    $resultante["fk_idtblcheck"]="ERROR";
+    $resultante["hora"]="ERROR";
+       
+    $jsonArray["entradas"][]=$resultante;
+    
+     echo json_encode($jsonArray);
+    
+    }
+
+
+
+
+?>
