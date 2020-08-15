@@ -1,0 +1,78 @@
+<?php
+
+ define("HOST","127.0.0.1:3307");
+ define("DB","bd_buffon");
+ define("USER","root");
+ define("PASS","");
+
+ //contendra informacion que sera trasladada por medio de un array JSON
+ $jsonArray = array();
+
+//isset este comprueba si una variable esta definida
+
+if(isset($_GET["id_tbltoken"])
+&& isset($_GET["nombre_visitante"])
+&& isset($_GET["apellido_visitante"])
+&& isset($_GET["dpi"])
+&& isset($_GET["descripcion"])
+&& isset($_GET["fecha"])
+&& isset($_GET["fk_usuario"])
+){
+
+    $id_tbltoken =$_GET["id_tbltoken"];
+    $nombre_visitante =$_GET["nombre_visitante"];
+    $apellido_visitante=$_GET["apellido_visitante"];
+    $dpi =$_GET["dpi"];
+    $descripcion =$_GET["descripcion"];
+    $fk_usuario=$_GET["fk_usuario"];
+
+    $fecha=$_GET["fecha"];
+    $fechaN =strtotime($fecha);
+    $fechaN = date('Y/m/d',$fechaN);
+
+
+$conexion =mysqli_connect(HOST,USER,PASS,DB);
+
+$insertar ="INSERT INTO tbltoken (id_tbltoken,nombre_visitante,apellido_visitante,dpi,descripcion,fecha,fk_usuario)
+VALUES ('{$id_tbltoken}','{$nombre_visitante}','{$apellido_visitante}',{$dpi},'{$descripcion}','{$fechaN}',{$fk_usuario})";
+
+//$query = mysqli_query($conexion, $insertar) or die('error' .mysqli_error($conexion));
+
+$resultado_insertar = mysqli_query($conexion,$insertar);
+
+$jsonArray["token"]=$resultado_insertar;
+
+mysqli_close($conexion);
+//echo json_encode($jsonArray);
+
+if( json_encode($jsonArray) == true){
+
+    echo "Datos ingresados correctamente";
+
+}else{
+
+    echo "Ha ocurrido un error en la insercion";
+
+}
+
+
+
+}else{
+
+$resultante["id_tbltoken"]="ERROR";
+$resultante["nombre_visitante"]="ERROR";
+$resultante["apellido_visitante"]="ERROR";
+$resultante["dpi"]="ERROR";
+$resultante["descripcion"]="ERROR";
+$resultante["fecha"]="ERROR";
+$resultante["fk_usuario"]="ERROR";
+   
+$jsonArray["token"]=$resultante;
+
+ echo json_encode($jsonArray);
+
+}
+
+
+
+?>
