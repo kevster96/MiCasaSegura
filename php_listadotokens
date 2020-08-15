@@ -1,0 +1,55 @@
+<?php
+
+define("HOST","127.0.0.1:3307");
+ define("DB","bd_buffon");
+ define("USER","root");
+ define("PASS","");
+
+ $json = array();
+ 
+ $conexion = mysqli_connect(HOST,USER,PASS,DB);
+
+ if(!$conexion){
+    die("Connection failed: " . mysqli_connect_error());
+ }
+
+
+ $fk_usuario =$_GET["fk_usuario"];
+ $fecha=$_GET["fecha"];
+
+
+
+ $consulta_mostrar ="SELECT * FROM tbltoken WHERE fk_usuario='{$fk_usuario}' AND fecha='{$fecha}';";
+
+$resultado_consulta = mysqli_query($conexion, $consulta_mostrar);
+
+if(mysqli_num_rows($resultado_consulta)>0){
+
+    while($registro = mysqli_fetch_array($resultado_consulta)){
+
+        $json["registro"][]= $registro;
+     //   $json["medicamentos"]= $registro;
+
+    }
+    echo json_encode($json);
+    mysqli_close($conexion);
+
+}
+
+else{
+
+    $resultante["id_tbltoken"]="ERROR";
+    $resultante["nombre_visitante"]="ERROR";
+    $resultante["apellido_visitante"]="ERROR";
+    $resultante["dpi"]="ERROR";
+    $resultante["descripcion"]="ERROR";
+    $resultante["fecha"]="ERROR";
+    $resultante["fk_usuario"]="ERROR";
+       
+    $jsonArray["registro"][]=$resultante;
+    
+     echo json_encode($jsonArray);
+    
+    }
+
+?>
